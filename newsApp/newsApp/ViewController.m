@@ -7,10 +7,14 @@
 //
 
 #import "ViewController.h"
+#import "ArticleDownloader.h"
+#import "CoreDataController.h"
+#import "Article.h"
 
 @interface ViewController () <UITableViewDataSource, UITableViewDelegate>
 
 @property (nonatomic, strong) UITableView *tableView;
+@property (nonatomic, strong) NSArray *articles;
 
 @end
 
@@ -18,6 +22,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    self.title = @"Articles";
     self.view.backgroundColor = [UIColor whiteColor];
     
     [self setupTableView];
@@ -40,6 +45,18 @@
     self.tableView.frame = self.view.bounds;
 }
 
+- (void)viewDidAppear:(BOOL)animated {
+    [super viewDidAppear:animated];
+    
+    __weak typeof(self) weakSelf = self;
+    [ArticleDownloader downloadArticlesWithCompletion:^(BOOL success) {
+        [[NSOperationQueue mainQueue] addOperationWithBlock:^{
+            weakSelf.articles = [CoreDataController allArticles];
+            [weakSelf.tableView reloadData];
+        }];
+    }];
+}
+
 
 #pragma mark - UITableViewDelegate
 
@@ -48,13 +65,14 @@
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return 10;
+    return self.articles.count;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:NSStringFromClass(UITableViewCell.class) forIndexPath:indexPath];
     
-    cell.textLabel.text = @"BIG BOSS";
+    Article *article = self.articles[indexPath.row];
+    cell.textLabel.text = article.title;
     
     return cell;
 }

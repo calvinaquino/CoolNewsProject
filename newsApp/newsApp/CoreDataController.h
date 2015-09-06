@@ -9,6 +9,8 @@
 #import <Foundation/Foundation.h>
 #import <CoreData/CoreData.h>
 
+@class Article;
+
 @interface CoreDataController : NSObject
 
 @property (readonly, strong, nonatomic) NSManagedObjectContext *managedObjectContext;
@@ -18,6 +20,12 @@
 + (CoreDataController *)sharedInstance;
 + (NSManagedObjectContext *)context;
 + (void)saveContext;
+
 - (NSURL *)applicationDocumentsDirectory;
+
++ (Article *)newArticle;
++ (NSArray *)allArticles;
++ (NSUInteger)countAllArticles;
++ (Article *)articleWithTitle:(NSString *)title;
 
 @end

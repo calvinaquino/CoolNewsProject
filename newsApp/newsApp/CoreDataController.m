@@ -7,6 +7,7 @@
 //
 
 #import "CoreDataController.h"
+#import "Article.h"
 
 @implementation CoreDataController
 
@@ -94,6 +95,65 @@
 
 + (void)saveContext {
     [[CoreDataController sharedInstance] saveContext];
+}
+
++ (Article *)newArticle {
+    return [Article insertInManagedObjectContext:[CoreDataController context]];
+}
+
++ (NSArray *)allArticles {
+    return [CoreDataController findRecordsEntityNamed:[Article entityName] usingPredicate:nil];
+}
+
++ (NSUInteger)countAllArticles {
+    return [CoreDataController countRecordsOfClass:[Article class] usingPredicate:nil];
+}
+
++ (Article *)articleWithTitle:(NSString *)title {
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"title == %@",title];
+    return [[CoreDataController findRecordsEntityNamed:[Article entityName] usingPredicate:predicate] firstObject];
+}
+
+
+#pragma mark - Generic Methods
+
++ (NSArray *)findRecordsEntityNamed:(NSString *)entityName usingPredicate:(NSPredicate *)predicate {
+    NSFetchRequest *request = [[NSFetchRequest alloc] init];
+    NSManagedObjectContext *context = [CoreDataController context];
+    NSEntityDescription *entity = [NSEntityDescription entityForName:entityName inManagedObjectContext:context];
+    [request setEntity:entity];
+    [request setResultType:NSManagedObjectResultType];
+    
+    if (predicate) {
+        [request setPredicate:predicate];
+    }
+    
+    NSError *error = nil;
+    NSArray *fetchedObjects = [context executeFetchRequest:request error:&error];
+    if (error) {
+        NSLog(@"Unresolved fetch error %@, %@", error, [error userInfo]);
+    }
+    return fetchedObjects;
+}
+
++ (NSUInteger)countRecordsOfClass:(Class)class usingPredicate:(NSPredicate *)predicate {
+    NSString *className = NSStringFromClass(class);
+    NSManagedObjectContext *context = [CoreDataController context];
+    NSFetchRequest *request = [[NSFetchRequest alloc] init];
+    NSEntityDescription *entity = [NSEntityDescription entityForName:className inManagedObjectContext:context];
+    [request setEntity:entity];
+    [request setResultType:NSManagedObjectResultType];
+    
+    if (predicate) {
+        [request setPredicate:predicate];
+    }
+    
+    NSError *error = nil;
+    NSUInteger objectCount = [context countForFetchRequest:request error:&error];
+    if (error) {
+        NSLog(@"Unresolved fetch error %@, %@", [error userInfo], error);
+    }
+    return objectCount;
 }
 
 
