@@ -6,19 +6,20 @@
 //  Copyright (c) 2015 Calvin Gonçalves de Aquino. All rights reserved.
 //
 
-#import "ViewController.h"
+#import "ArticleListViewController.h"
+#import "ArticleDetailViewController.h"
 #import "ArticleDownloader.h"
 #import "CoreDataController.h"
 #import "Article.h"
 
-@interface ViewController () <UITableViewDataSource, UITableViewDelegate>
+@interface ArticleListViewController () <UITableViewDataSource, UITableViewDelegate>
 
 @property (nonatomic, strong) UITableView *tableView;
 @property (nonatomic, strong) NSArray *articles;
 
 @end
 
-@implementation ViewController
+@implementation ArticleListViewController
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -77,5 +78,13 @@
     return cell;
 }
 
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
+    cell.selected = NO;
+    
+    ArticleDetailViewController *articleDetailViewController = [[ArticleDetailViewController alloc] init];
+    articleDetailViewController.article = self.articles[indexPath.row];
+    [self.navigationController pushViewController:articleDetailViewController animated:YES];
+}
 
 @end
