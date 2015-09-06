@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		9857DF421B9CC76B007D7A03 /* Article.m in Sources */ = {isa = PBXBuildFile; fileRef = 9857DF411B9CC76B007D7A03 /* Article.m */; };
+		9857DF461B9CC782007D7A03 /* _Article.m in Sources */ = {isa = PBXBuildFile; fileRef = 9857DF451B9CC782007D7A03 /* _Article.m */; };
 		98ED59A41B9C988F001186D8 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 98ED59A31B9C988F001186D8 /* main.m */; };
 		98ED59A71B9C988F001186D8 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 98ED59A61B9C988F001186D8 /* AppDelegate.m */; };
 		98ED59AA1B9C988F001186D8 /* newsApp.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 98ED59A81B9C988F001186D8 /* newsApp.xcdatamodeld */; };
@@ -14,6 +16,7 @@
 		98ED59B21B9C988F001186D8 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 98ED59B11B9C988F001186D8 /* Images.xcassets */; };
 		98ED59B51B9C988F001186D8 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 98ED59B31B9C988F001186D8 /* LaunchScreen.xib */; };
 		98ED59C11B9C988F001186D8 /* newsAppTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 98ED59C01B9C988F001186D8 /* newsAppTests.m */; };
+		98ED59CD1B9CC1A2001186D8 /* CoreDataController.m in Sources */ = {isa = PBXBuildFile; fileRef = 98ED59CC1B9CC1A2001186D8 /* CoreDataController.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -27,6 +30,10 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		9857DF401B9CC76B007D7A03 /* Article.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Article.h; path = Model/Article.h; sourceTree = SOURCE_ROOT; };
+		9857DF411B9CC76B007D7A03 /* Article.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Article.m; path = Model/Article.m; sourceTree = SOURCE_ROOT; };
+		9857DF441B9CC782007D7A03 /* _Article.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = _Article.h; path = Model/Entities/_Article.h; sourceTree = SOURCE_ROOT; };
+		9857DF451B9CC782007D7A03 /* _Article.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = _Article.m; path = Model/Entities/_Article.m; sourceTree = SOURCE_ROOT; };
 		98ED599E1B9C988E001186D8 /* newsApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = newsApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		98ED59A21B9C988F001186D8 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		98ED59A31B9C988F001186D8 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
@@ -40,6 +47,8 @@
 		98ED59BA1B9C988F001186D8 /* newsAppTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = newsAppTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		98ED59BF1B9C988F001186D8 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		98ED59C01B9C988F001186D8 /* newsAppTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = newsAppTests.m; sourceTree = "<group>"; };
+		98ED59CB1B9CC1A2001186D8 /* CoreDataController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CoreDataController.h; sourceTree = "<group>"; };
+		98ED59CC1B9CC1A2001186D8 /* CoreDataController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CoreDataController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -60,6 +69,25 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		9857DF3F1B9CC6A6007D7A03 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				9857DF431B9CC776007D7A03 /* Entities */,
+				9857DF401B9CC76B007D7A03 /* Article.h */,
+				9857DF411B9CC76B007D7A03 /* Article.m */,
+			);
+			name = Models;
+			sourceTree = "<group>";
+		};
+		9857DF431B9CC776007D7A03 /* Entities */ = {
+			isa = PBXGroup;
+			children = (
+				9857DF441B9CC782007D7A03 /* _Article.h */,
+				9857DF451B9CC782007D7A03 /* _Article.m */,
+			);
+			name = Entities;
+			sourceTree = "<group>";
+		};
 		98ED59951B9C988E001186D8 = {
 			isa = PBXGroup;
 			children = (
@@ -85,9 +113,9 @@
 				98ED59A61B9C988F001186D8 /* AppDelegate.m */,
 				98ED59AB1B9C988F001186D8 /* ViewController.h */,
 				98ED59AC1B9C988F001186D8 /* ViewController.m */,
+				98ED59CA1B9CC184001186D8 /* Core Data */,
 				98ED59B11B9C988F001186D8 /* Images.xcassets */,
 				98ED59B31B9C988F001186D8 /* LaunchScreen.xib */,
-				98ED59A81B9C988F001186D8 /* newsApp.xcdatamodeld */,
 				98ED59A11B9C988F001186D8 /* Supporting Files */,
 			);
 			path = newsApp;
@@ -117,6 +145,17 @@
 				98ED59BF1B9C988F001186D8 /* Info.plist */,
 			);
 			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		98ED59CA1B9CC184001186D8 /* Core Data */ = {
+			isa = PBXGroup;
+			children = (
+				9857DF3F1B9CC6A6007D7A03 /* Models */,
+				98ED59A81B9C988F001186D8 /* newsApp.xcdatamodeld */,
+				98ED59CB1B9CC1A2001186D8 /* CoreDataController.h */,
+				98ED59CC1B9CC1A2001186D8 /* CoreDataController.m */,
+			);
+			name = "Core Data";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -219,8 +258,11 @@
 			buildActionMask = 2147483647;
 			files = (
 				98ED59A71B9C988F001186D8 /* AppDelegate.m in Sources */,
+				98ED59CD1B9CC1A2001186D8 /* CoreDataController.m in Sources */,
+				9857DF421B9CC76B007D7A03 /* Article.m in Sources */,
 				98ED59AA1B9C988F001186D8 /* newsApp.xcdatamodeld in Sources */,
 				98ED59AD1B9C988F001186D8 /* ViewController.m in Sources */,
+				9857DF461B9CC782007D7A03 /* _Article.m in Sources */,
 				98ED59A41B9C988F001186D8 /* main.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -410,6 +452,7 @@
 				98ED59C61B9C988F001186D8 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		98ED59C71B9C988F001186D8 /* Build configuration list for PBXNativeTarget "newsAppTests" */ = {
 			isa = XCConfigurationList;
@@ -418,6 +461,7 @@
 				98ED59C91B9C988F001186D8 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 
