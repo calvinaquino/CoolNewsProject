@@ -8,6 +8,7 @@ const struct ArticleAttributes ArticleAttributes = {
 	.content = @"content",
 	.date = @"date",
 	.image = @"image",
+	.read = @"read",
 	.title = @"title",
 	.website = @"website",
 };
@@ -38,6 +39,12 @@ const struct ArticleAttributes ArticleAttributes = {
 + (NSSet*)keyPathsForValuesAffectingValueForKey:(NSString*)key {
 	NSSet *keyPaths = [super keyPathsForValuesAffectingValueForKey:key];
 
+	if ([key isEqualToString:@"readValue"]) {
+		NSSet *affectingKey = [NSSet setWithObject:@"read"];
+		keyPaths = [keyPaths setByAddingObjectsFromSet:affectingKey];
+		return keyPaths;
+	}
+
 	return keyPaths;
 }
 
@@ -48,6 +55,26 @@ const struct ArticleAttributes ArticleAttributes = {
 @dynamic date;
 
 @dynamic image;
+
+@dynamic read;
+
+- (BOOL)readValue {
+	NSNumber *result = [self read];
+	return [result boolValue];
+}
+
+- (void)setReadValue:(BOOL)value_ {
+	[self setRead:[NSNumber numberWithBool:value_]];
+}
+
+- (BOOL)primitiveReadValue {
+	NSNumber *result = [self primitiveRead];
+	return [result boolValue];
+}
+
+- (void)setPrimitiveReadValue:(BOOL)value_ {
+	[self setPrimitiveRead:[NSNumber numberWithBool:value_]];
+}
 
 @dynamic title;
 

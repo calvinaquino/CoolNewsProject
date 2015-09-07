@@ -12,10 +12,12 @@
 #import "CoreDataController.h"
 #import "Article.h"
 
-@interface ArticleListViewController () <UITableViewDataSource, UITableViewDelegate>
+@interface ArticleListViewController () <UITableViewDataSource, UITableViewDelegate, ArticleDetailDelegate>
 
+@property (nonatomic, strong) UIRefreshControl *refreshControl;
 @property (nonatomic, strong) UITableView *tableView;
 @property (nonatomic, strong) NSArray *articles;
+@property (nonatomic, assign) BOOL firstTimeRefresh;
 
 @end
 
@@ -25,8 +27,10 @@
     [super viewDidLoad];
     self.title = @"Articles";
     self.view.backgroundColor = [UIColor whiteColor];
+    self.firstTimeRefresh = YES;
     
     [self setupTableView];
+    [self loadDownloadedArticles];
 }
 
 - (void)setupTableView {
@@ -37,7 +41,18 @@
     self.tableView.dataSource = self;
     self.tableView.delegate = self;
     
+    self.refreshControl = [[UIRefreshControl alloc] init];
+    [self.refreshControl addTarget:self action:@selector(fetchArticles) forControlEvents:UIControlEventValueChanged];
+    [self.tableView addSubview:self.refreshControl];
+    
     [self.view addSubview:self.tableView];
+}
+
+- (void)loadDownloadedArticles {
+    self.articles = [CoreDataController allArticles];
+    if (self.articles.count) {
+        [self.tableView reloadData];
+    }
 }
 
 - (void)viewDidLayoutSubviews {
@@ -49,9 +64,22 @@
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
     
+    if (self.firstTimeRefresh) {
+        self.firstTimeRefresh = NO;
+        [self fetchArticles];
+    }
+}
+
+
+#pragma mark - Private Methods
+
+- (void)fetchArticles {
     __weak typeof(self) weakSelf = self;
     [ArticleDownloader downloadArticlesWithCompletion:^(BOOL success) {
         [[NSOperationQueue mainQueue] addOperationWithBlock:^{
+            if (weakSelf.refreshControl.isRefreshing) {
+                [weakSelf.refreshControl endRefreshing];
+            }
             weakSelf.articles = [CoreDataController allArticles];
             [weakSelf.tableView reloadData];
         }];
@@ -74,6 +102,7 @@
     
     Article *article = self.articles[indexPath.row];
     cell.textLabel.text = article.title;
+    cell.accessoryType = article.readValue ? UITableViewCellAccessoryCheckmark : UITableViewCellAccessoryNone;
     
     return cell;
 }
@@ -83,8 +112,46 @@
     cell.selected = NO;
     
     ArticleDetailViewController *articleDetailViewController = [[ArticleDetailViewController alloc] init];
+    articleDetailViewController.delegate = self;
     articleDetailViewController.article = self.articles[indexPath.row];
     [self.navigationController pushViewController:articleDetailViewController animated:YES];
 }
+
+- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath {
+    return YES;
+}
+
+- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
+}
+
+- (NSArray *)tableView:(UITableView *)tableView editActionsForRowAtIndexPath:(NSIndexPath *)indexPath {
+    __weak typeof(self) weakSelf = self;
+    Article *article = weakSelf.articles[indexPath.row];
+    BOOL isRead = article.readValue;
+    NSString *markReadTitle = isRead ? @"Mark as unread" : @"Mark as read";
+    UITableViewRowAction *toggleReadStateAction = [UITableViewRowAction rowActionWithStyle:UITableViewRowActionStyleNormal title:markReadTitle handler:^(UITableViewRowAction *action, NSIndexPath *indexPath) {
+        article.readValue = !article.readValue;
+        [CoreDataController saveContext];
+        [weakSelf.tableView setEditing:NO animated:YES];
+        [self.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
+    }];
+    UITableViewRowAction *deleteAction = [UITableViewRowAction rowActionWithStyle:UITableViewRowActionStyleDestructive title:@"Delete" handler:^(UITableViewRowAction *action, NSIndexPath *indexPath) {
+        [[CoreDataController context] deleteObject:self.articles[indexPath.row]];
+        self.articles = [CoreDataController allArticles];
+        [self.tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
+    }];
+    return @[deleteAction, toggleReadStateAction];
+}
+
+
+#pragma mark - ArticleDetailDelegate
+
+- (void)articleDetailViewController:(ArticleDetailViewController *)articleDetailViewController didOpenArticle:(Article *)article {
+    article.readValue = YES;
+    [CoreDataController saveContext];
+    NSIndexPath *readArticleIndexPath = [NSIndexPath indexPathForRow:[self.articles indexOfObject:article] inSection:0];
+    [self.tableView reloadRowsAtIndexPaths:@[readArticleIndexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
+}
+
 
 @end

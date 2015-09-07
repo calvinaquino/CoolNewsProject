@@ -10,8 +10,17 @@
 
 @class Article;
 
+@protocol ArticleDetailDelegate;
+
 @interface ArticleDetailViewController : UIViewController
 
 @property (nonatomic, assign) Article *article;
+@property (nonatomic, weak) id<ArticleDetailDelegate> delegate;
+
+@end
+
+@protocol ArticleDetailDelegate <NSObject>
+
+- (void)articleDetailViewController:(ArticleDetailViewController *)articleDetailViewController didOpenArticle:(Article *)article;
 
 @end

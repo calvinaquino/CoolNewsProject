@@ -9,6 +9,7 @@
 #import "ArticleDetailViewController.h"
 #import "Article.h"
 #import "UIView+Rect.h"
+#import "CoreDataController.h"
 
 @interface ArticleDetailViewController ()
 
@@ -106,6 +107,10 @@ static CGFloat const kMargin = 20.0f;
     self.articleDateLabel.text = _article.date;
     self.articleContentTextView.text = _article.content;
     self.articleAuthorsLabel.text = _article.authors;
+    
+    if ([self.delegate respondsToSelector:@selector(articleDetailViewController:didOpenArticle:)]) {
+        [self.delegate articleDetailViewController:self didOpenArticle:self.article];
+    }
     
     [self.view setNeedsLayout];
 }

@@ -8,6 +8,7 @@ extern const struct ArticleAttributes {
 	__unsafe_unretained NSString *content;
 	__unsafe_unretained NSString *date;
 	__unsafe_unretained NSString *image;
+	__unsafe_unretained NSString *read;
 	__unsafe_unretained NSString *title;
 	__unsafe_unretained NSString *website;
 } ArticleAttributes;
@@ -37,6 +38,14 @@ extern const struct ArticleAttributes {
 
 //- (BOOL)validateImage:(id*)value_ error:(NSError**)error_;
 
+@property (nonatomic, strong) NSNumber* read;
+
+@property (atomic) BOOL readValue;
+- (BOOL)readValue;
+- (void)setReadValue:(BOOL)value_;
+
+//- (BOOL)validateRead:(id*)value_ error:(NSError**)error_;
+
 @property (nonatomic, strong) NSString* title;
 
 //- (BOOL)validateTitle:(id*)value_ error:(NSError**)error_;
@@ -60,6 +69,12 @@ extern const struct ArticleAttributes {
 
 - (NSString*)primitiveImage;
 - (void)setPrimitiveImage:(NSString*)value;
+
+- (NSNumber*)primitiveRead;
+- (void)setPrimitiveRead:(NSNumber*)value;
+
+- (BOOL)primitiveReadValue;
+- (void)setPrimitiveReadValue:(BOOL)value_;
 
 - (NSString*)primitiveTitle;
 - (void)setPrimitiveTitle:(NSString*)value;
