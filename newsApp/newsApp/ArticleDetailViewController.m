@@ -11,6 +11,7 @@
 #import "Image.h"
 #import "UIView+Rect.h"
 #import "CoreDataController.h"
+#import "ArticleDownloader.h"
 
 @interface ArticleDetailViewController ()
 
@@ -24,8 +25,23 @@
 @end
 
 static CGFloat const kMargin = 20.0f;
+static CGFloat const kImageWidth = 160.f;
+static CGFloat const kImageHeight = 160.f;
 
 @implementation ArticleDetailViewController
+
+- (instancetype)init {
+    self = [super init];
+    if (self) {
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleFetchedImage:) name:kArticleDownloaderImageFetchedNotification object:nil];
+    }
+    
+    return self;
+}
+
+- (void)dealloc {
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -45,15 +61,36 @@ static CGFloat const kMargin = 20.0f;
     self.scrollView = [[UIScrollView alloc] init];
     
     self.articleTitleLabel = [[UILabel alloc] init];
+    self.articleTitleLabel.font = [UIFont systemFontOfSize:16];
+    self.articleTitleLabel.textColor = [UIColor blackColor];
+    self.articleTitleLabel.textAlignment = NSTextAlignmentLeft;
+    self.articleTitleLabel.lineBreakMode = NSLineBreakByWordWrapping;
+    self.articleTitleLabel.minimumScaleFactor = 0.7;
+    self.articleTitleLabel.numberOfLines = 0;
+    self.articleTitleLabel.adjustsFontSizeToFitWidth = YES;
     
     self.articleImageView = [[UIImageView alloc] init];
+    self.articleImageView.contentMode = UIViewContentModeScaleAspectFit;
     
     self.articleDateLabel = [[UILabel alloc] init];
+    self.articleDateLabel.font = [UIFont systemFontOfSize:13];
+    self.articleDateLabel.textColor = [[UIColor blackColor] colorWithAlphaComponent:0.5];
+    self.articleDateLabel.textAlignment = NSTextAlignmentLeft;
+    self.articleDateLabel.lineBreakMode = NSLineBreakByTruncatingMiddle;
+    self.articleDateLabel.minimumScaleFactor = 0.5;
+    self.articleDateLabel.adjustsFontSizeToFitWidth = YES;
     
     self.articleContentTextView = [[UITextView alloc] init];
     self.articleContentTextView.userInteractionEnabled = NO;
+    self.articleContentTextView.font = [UIFont systemFontOfSize:14];
     
     self.articleAuthorsLabel = [[UILabel alloc] init];
+    self.articleAuthorsLabel.font = [UIFont systemFontOfSize:13];
+    self.articleAuthorsLabel.textColor = [[UIColor blackColor] colorWithAlphaComponent:0.5];
+    self.articleAuthorsLabel.textAlignment = NSTextAlignmentLeft;
+    self.articleAuthorsLabel.lineBreakMode = NSLineBreakByTruncatingMiddle;
+    self.articleAuthorsLabel.minimumScaleFactor = 0.5;
+    self.articleAuthorsLabel.adjustsFontSizeToFitWidth = YES;
     
     [self.scrollView addSubview:self.articleTitleLabel];
     [self.scrollView addSubview:self.articleImageView];
@@ -77,9 +114,14 @@ static CGFloat const kMargin = 20.0f;
     self.articleDateLabel.top = self.articleTitleLabel.bottom + kMargin;
     self.articleDateLabel.width = self.articleTitleLabel.width;
     
+    self.articleImageView.top = self.articleDateLabel.bottom + kMargin;
+    self.articleImageView.width = kImageWidth;
+    self.articleImageView.height = kImageHeight;
+    self.articleImageView.centerX = self.view.centerX;
+    
     [self.articleContentTextView sizeToFit];
     self.articleContentTextView.left = kMargin;
-    self.articleContentTextView.top = self.articleDateLabel.bottom + kMargin;
+    self.articleContentTextView.top = self.articleImageView.bottom + kMargin;
     self.articleContentTextView.width = self.articleDateLabel.width;
     
     [self.articleAuthorsLabel sizeToFit];
@@ -119,5 +161,16 @@ static CGFloat const kMargin = 20.0f;
     
     [self.view setNeedsLayout];
 }
+
+- (void)handleFetchedImage:(NSNotification *)notification {
+    Article *article = notification.userInfo[kArticleDownloaderImageFetchedForArticleNotification];
+        if (self.article == article) {
+            __weak typeof(self) weakSelf = self;
+            [[NSOperationQueue mainQueue] addOperationWithBlock:^{
+                weakSelf.articleImageView.image = [weakSelf.article.image imageFromDisk];
+            }];
+        }
+}
+
 
 @end
