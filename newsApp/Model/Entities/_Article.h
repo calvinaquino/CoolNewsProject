@@ -7,11 +7,16 @@ extern const struct ArticleAttributes {
 	__unsafe_unretained NSString *authors;
 	__unsafe_unretained NSString *content;
 	__unsafe_unretained NSString *date;
-	__unsafe_unretained NSString *image;
 	__unsafe_unretained NSString *read;
 	__unsafe_unretained NSString *title;
 	__unsafe_unretained NSString *website;
 } ArticleAttributes;
+
+extern const struct ArticleRelationships {
+	__unsafe_unretained NSString *image;
+} ArticleRelationships;
+
+@class Image;
 
 @interface ArticleID : NSManagedObjectID {}
 @end
@@ -34,10 +39,6 @@ extern const struct ArticleAttributes {
 
 //- (BOOL)validateDate:(id*)value_ error:(NSError**)error_;
 
-@property (nonatomic, strong) NSString* image;
-
-//- (BOOL)validateImage:(id*)value_ error:(NSError**)error_;
-
 @property (nonatomic, strong) NSNumber* read;
 
 @property (atomic) BOOL readValue;
@@ -54,6 +55,10 @@ extern const struct ArticleAttributes {
 
 //- (BOOL)validateWebsite:(id*)value_ error:(NSError**)error_;
 
+@property (nonatomic, strong) Image *image;
+
+//- (BOOL)validateImage:(id*)value_ error:(NSError**)error_;
+
 @end
 
 @interface _Article (CoreDataGeneratedPrimitiveAccessors)
@@ -67,9 +72,6 @@ extern const struct ArticleAttributes {
 - (NSString*)primitiveDate;
 - (void)setPrimitiveDate:(NSString*)value;
 
-- (NSString*)primitiveImage;
-- (void)setPrimitiveImage:(NSString*)value;
-
 - (NSNumber*)primitiveRead;
 - (void)setPrimitiveRead:(NSNumber*)value;
 
@@ -81,5 +83,8 @@ extern const struct ArticleAttributes {
 
 - (NSString*)primitiveWebsite;
 - (void)setPrimitiveWebsite:(NSString*)value;
+
+- (Image*)primitiveImage;
+- (void)setPrimitiveImage:(Image*)value;
 
 @end

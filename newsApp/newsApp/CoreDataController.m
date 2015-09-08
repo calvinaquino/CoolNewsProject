@@ -8,6 +8,7 @@
 
 #import "CoreDataController.h"
 #import "Article.h"
+#import "Image.h"
 
 @implementation CoreDataController
 
@@ -100,6 +101,11 @@
 + (Article *)newArticle {
     return [Article insertInManagedObjectContext:[CoreDataController context]];
 }
+
++ (Image *)newImage {
+    return [Image insertInManagedObjectContext:[CoreDataController context]];
+}
+
 
 + (NSArray *)allArticles {
     return [CoreDataController findRecordsEntityNamed:[Article entityName] usingPredicate:nil];

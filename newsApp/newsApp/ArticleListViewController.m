@@ -11,6 +11,8 @@
 #import "ArticleDownloader.h"
 #import "CoreDataController.h"
 #import "Article.h"
+#import "Image.h"
+#import "ArticleTableViewCell.h"
 
 @interface ArticleListViewController () <UITableViewDataSource, UITableViewDelegate, ArticleDetailDelegate>
 
@@ -22,6 +24,19 @@
 @end
 
 @implementation ArticleListViewController
+
+- (instancetype)init {
+    self = [super init];
+    if (self) {
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleFetchedImages:) name:kArticleDownloaderImageFetchedNotification object:nil];
+    }
+    
+    return self;
+}
+
+- (void)dealloc {
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -37,7 +52,7 @@
     self.tableView = [[UITableView alloc] init];
     self.tableView.backgroundColor = [UIColor whiteColor];
     
-    [self.tableView registerClass:UITableViewCell.class forCellReuseIdentifier:NSStringFromClass(UITableViewCell.class)];
+    [self.tableView registerClass:ArticleTableViewCell.class forCellReuseIdentifier:[ArticleTableViewCell identifier]];
     self.tableView.dataSource = self;
     self.tableView.delegate = self;
     
@@ -86,6 +101,20 @@
     }];
 }
 
+- (void)handleFetchedImages:(NSNotification *)notification {
+    Article *article = notification.userInfo[kArticleDownloaderImageFetchedForArticleNotification];
+    NSInteger indexOfArticle = [self.articles indexOfObject:article];
+    NSArray *visibleIndexPaths = [self.tableView indexPathsForVisibleRows];
+    for (NSIndexPath *visibleIndexPath in visibleIndexPaths) {
+        if (visibleIndexPath.row == indexOfArticle) {
+            __weak typeof(self) weakSelf = self;
+            [[NSOperationQueue mainQueue] addOperationWithBlock:^{
+                [weakSelf.tableView reloadRowsAtIndexPaths:@[visibleIndexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
+            }];
+        }
+    }
+}
+
 
 #pragma mark - UITableViewDelegate
 
@@ -97,12 +126,15 @@
     return self.articles.count;
 }
 
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
+    return [ArticleTableViewCell height];
+}
+
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:NSStringFromClass(UITableViewCell.class) forIndexPath:indexPath];
+    ArticleTableViewCell *cell = (ArticleTableViewCell *)[tableView dequeueReusableCellWithIdentifier:[ArticleTableViewCell identifier] forIndexPath:indexPath];
     
     Article *article = self.articles[indexPath.row];
-    cell.textLabel.text = article.title;
-    cell.accessoryType = article.readValue ? UITableViewCellAccessoryCheckmark : UITableViewCellAccessoryNone;
+    cell.article = article;
     
     return cell;
 }
@@ -136,7 +168,9 @@
         [self.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
     }];
     UITableViewRowAction *deleteAction = [UITableViewRowAction rowActionWithStyle:UITableViewRowActionStyleDestructive title:@"Delete" handler:^(UITableViewRowAction *action, NSIndexPath *indexPath) {
-        [[CoreDataController context] deleteObject:self.articles[indexPath.row]];
+        Article *deletingArticle = self.articles[indexPath.row];
+        [deletingArticle deleteImage];
+        [[CoreDataController context] deleteObject:deletingArticle];
         self.articles = [CoreDataController allArticles];
         [self.tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
     }];

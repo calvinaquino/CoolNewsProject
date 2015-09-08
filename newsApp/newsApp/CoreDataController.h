@@ -9,7 +9,7 @@
 #import <Foundation/Foundation.h>
 #import <CoreData/CoreData.h>
 
-@class Article;
+@class Article, Image;
 
 @interface CoreDataController : NSObject
 
@@ -24,6 +24,7 @@
 - (NSURL *)applicationDocumentsDirectory;
 
 + (Article *)newArticle;
++ (Image *)newImage;
 + (NSArray *)allArticles;
 + (NSUInteger)countAllArticles;
 + (Article *)articleWithTitle:(NSString *)title;

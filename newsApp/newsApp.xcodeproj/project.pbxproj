@@ -12,6 +12,9 @@
 		9857DF4D1B9CCBA6007D7A03 /* ArticleDownloader.m in Sources */ = {isa = PBXBuildFile; fileRef = 9857DF4C1B9CCBA6007D7A03 /* ArticleDownloader.m */; };
 		98C0747B1B9CD73900DEA5D3 /* ArticleDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 98C0747A1B9CD73900DEA5D3 /* ArticleDetailViewController.m */; };
 		98C0747F1B9CDC6100DEA5D3 /* UIView+Rect.m in Sources */ = {isa = PBXBuildFile; fileRef = 98C0747E1B9CDC6100DEA5D3 /* UIView+Rect.m */; };
+		98C074821B9E4CD000DEA5D3 /* Image.m in Sources */ = {isa = PBXBuildFile; fileRef = 98C074811B9E4CD000DEA5D3 /* Image.m */; };
+		98C074851B9E4CD900DEA5D3 /* _Image.m in Sources */ = {isa = PBXBuildFile; fileRef = 98C074841B9E4CD900DEA5D3 /* _Image.m */; };
+		98C0748D1B9E5B1600DEA5D3 /* ArticleTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 98C0748C1B9E5B1600DEA5D3 /* ArticleTableViewCell.m */; };
 		98ED59A41B9C988F001186D8 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 98ED59A31B9C988F001186D8 /* main.m */; };
 		98ED59A71B9C988F001186D8 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 98ED59A61B9C988F001186D8 /* AppDelegate.m */; };
 		98ED59AA1B9C988F001186D8 /* newsApp.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 98ED59A81B9C988F001186D8 /* newsApp.xcdatamodeld */; };
@@ -46,6 +49,14 @@
 		98C0747A1B9CD73900DEA5D3 /* ArticleDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ArticleDetailViewController.m; sourceTree = "<group>"; };
 		98C0747D1B9CDC6100DEA5D3 /* UIView+Rect.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIView+Rect.h"; sourceTree = "<group>"; };
 		98C0747E1B9CDC6100DEA5D3 /* UIView+Rect.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIView+Rect.m"; sourceTree = "<group>"; };
+		98C074801B9E4CD000DEA5D3 /* Image.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Image.h; path = Model/Image.h; sourceTree = SOURCE_ROOT; };
+		98C074811B9E4CD000DEA5D3 /* Image.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Image.m; path = Model/Image.m; sourceTree = SOURCE_ROOT; };
+		98C074831B9E4CD900DEA5D3 /* _Image.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = _Image.h; path = Model/Entities/_Image.h; sourceTree = SOURCE_ROOT; };
+		98C074841B9E4CD900DEA5D3 /* _Image.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = _Image.m; path = Model/Entities/_Image.m; sourceTree = SOURCE_ROOT; };
+		98C074861B9E52D200DEA5D3 /* CoreImage.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreImage.framework; path = System/Library/Frameworks/CoreImage.framework; sourceTree = SDKROOT; };
+		98C074881B9E52ED00DEA5D3 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
+		98C0748B1B9E5B1600DEA5D3 /* ArticleTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ArticleTableViewCell.h; sourceTree = "<group>"; };
+		98C0748C1B9E5B1600DEA5D3 /* ArticleTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ArticleTableViewCell.m; sourceTree = "<group>"; };
 		98ED599E1B9C988E001186D8 /* newsApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = newsApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		98ED59A21B9C988F001186D8 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		98ED59A31B9C988F001186D8 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
@@ -86,6 +97,8 @@
 		04EC3E8B152F014F9059D0C8 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				98C074881B9E52ED00DEA5D3 /* CoreGraphics.framework */,
+				98C074861B9E52D200DEA5D3 /* CoreImage.framework */,
 				1B9253B59379166F340F2B84 /* libPods.a */,
 			);
 			name = Frameworks;
@@ -106,6 +119,8 @@
 				9857DF431B9CC776007D7A03 /* Entities */,
 				9857DF401B9CC76B007D7A03 /* Article.h */,
 				9857DF411B9CC76B007D7A03 /* Article.m */,
+				98C074801B9E4CD000DEA5D3 /* Image.h */,
+				98C074811B9E4CD000DEA5D3 /* Image.m */,
 			);
 			name = Models;
 			sourceTree = "<group>";
@@ -115,6 +130,8 @@
 			children = (
 				9857DF441B9CC782007D7A03 /* _Article.h */,
 				9857DF451B9CC782007D7A03 /* _Article.m */,
+				98C074831B9E4CD900DEA5D3 /* _Image.h */,
+				98C074841B9E4CD900DEA5D3 /* _Image.m */,
 			);
 			name = Entities;
 			sourceTree = "<group>";
@@ -148,6 +165,15 @@
 			name = Categories;
 			sourceTree = "<group>";
 		};
+		98C0748A1B9E5AF900DEA5D3 /* Components */ = {
+			isa = PBXGroup;
+			children = (
+				98C0748B1B9E5B1600DEA5D3 /* ArticleTableViewCell.h */,
+				98C0748C1B9E5B1600DEA5D3 /* ArticleTableViewCell.m */,
+			);
+			name = Components;
+			sourceTree = "<group>";
+		};
 		98ED59951B9C988E001186D8 = {
 			isa = PBXGroup;
 			children = (
@@ -174,6 +200,7 @@
 				98C0747C1B9CDC4900DEA5D3 /* Categories */,
 				98ED59A51B9C988F001186D8 /* AppDelegate.h */,
 				98ED59A61B9C988F001186D8 /* AppDelegate.m */,
+				98C0748A1B9E5AF900DEA5D3 /* Components */,
 				98C074781B9CD71B00DEA5D3 /* View Controllers */,
 				9857DF471B9CCB19007D7A03 /* Downloader */,
 				98ED59CA1B9CC184001186D8 /* Core Data */,
@@ -355,7 +382,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				98C074821B9E4CD000DEA5D3 /* Image.m in Sources */,
 				98ED59A71B9C988F001186D8 /* AppDelegate.m in Sources */,
+				98C0748D1B9E5B1600DEA5D3 /* ArticleTableViewCell.m in Sources */,
 				9857DF4D1B9CCBA6007D7A03 /* ArticleDownloader.m in Sources */,
 				98C0747F1B9CDC6100DEA5D3 /* UIView+Rect.m in Sources */,
 				98C0747B1B9CD73900DEA5D3 /* ArticleDetailViewController.m in Sources */,
@@ -363,6 +392,7 @@
 				9857DF421B9CC76B007D7A03 /* Article.m in Sources */,
 				98ED59AA1B9C988F001186D8 /* newsApp.xcdatamodeld in Sources */,
 				98ED59AD1B9C988F001186D8 /* ArticleListViewController.m in Sources */,
+				98C074851B9E4CD900DEA5D3 /* _Image.m in Sources */,
 				9857DF461B9CC782007D7A03 /* _Article.m in Sources */,
 				98ED59A41B9C988F001186D8 /* main.m in Sources */,
 			);

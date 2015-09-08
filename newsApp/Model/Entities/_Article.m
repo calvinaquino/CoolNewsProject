@@ -7,10 +7,13 @@ const struct ArticleAttributes ArticleAttributes = {
 	.authors = @"authors",
 	.content = @"content",
 	.date = @"date",
-	.image = @"image",
 	.read = @"read",
 	.title = @"title",
 	.website = @"website",
+};
+
+const struct ArticleRelationships ArticleRelationships = {
+	.image = @"image",
 };
 
 @implementation ArticleID
@@ -54,8 +57,6 @@ const struct ArticleAttributes ArticleAttributes = {
 
 @dynamic date;
 
-@dynamic image;
-
 @dynamic read;
 
 - (BOOL)readValue {
@@ -79,6 +80,8 @@ const struct ArticleAttributes ArticleAttributes = {
 @dynamic title;
 
 @dynamic website;
+
+@dynamic image;
 
 @end
 

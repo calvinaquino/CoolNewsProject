@@ -8,6 +8,7 @@
 
 #import "ArticleDetailViewController.h"
 #import "Article.h"
+#import "Image.h"
 #import "UIView+Rect.h"
 #import "CoreDataController.h"
 
@@ -107,6 +108,10 @@ static CGFloat const kMargin = 20.0f;
     self.articleDateLabel.text = _article.date;
     self.articleContentTextView.text = _article.content;
     self.articleAuthorsLabel.text = _article.authors;
+    
+    if (self.article.image.fetchedValue) {
+        self.articleImageView.image = [self.article.image imageFromDisk];
+    }
     
     if ([self.delegate respondsToSelector:@selector(articleDetailViewController:didOpenArticle:)]) {
         [self.delegate articleDetailViewController:self didOpenArticle:self.article];
