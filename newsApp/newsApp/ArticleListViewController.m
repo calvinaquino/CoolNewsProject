@@ -25,6 +25,7 @@ static CGFloat const kMargin = 20.f;
 @property (nonatomic, strong) UIView *filterContainer;
 @property (nonatomic, strong) UISegmentedControl *filterSegmentedControl;
 @property (nonatomic, strong) NSArray *filters;
+@property (nonatomic, weak) ArticleDetailViewController *articleDetailViewController;
 @property (nonatomic, assign) BOOL firstTimeRefresh;
 
 @end
@@ -200,7 +201,8 @@ static CGFloat const kMargin = 20.f;
     ArticleDetailViewController *articleDetailViewController = [[ArticleDetailViewController alloc] init];
     articleDetailViewController.delegate = self;
     articleDetailViewController.article = self.articles[indexPath.row];
-    [self.navigationController pushViewController:articleDetailViewController animated:YES];
+    _articleDetailViewController = articleDetailViewController;
+    [self.splitViewController showDetailViewController:articleDetailViewController sender:self];
 }
 
 - (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -223,6 +225,10 @@ static CGFloat const kMargin = 20.f;
     }];
     UITableViewRowAction *deleteAction = [UITableViewRowAction rowActionWithStyle:UITableViewRowActionStyleDestructive title:@"Delete" handler:^(UITableViewRowAction *action, NSIndexPath *indexPath) {
         Article *deletingArticle = self.articles[indexPath.row];
+        
+        if (_articleDetailViewController.article == deletingArticle) {
+            _articleDetailViewController.article = nil;
+        }
         [deletingArticle deleteImage];
         [[CoreDataController context] deleteObject:deletingArticle];
         self.articles = [CoreDataController allArticles];

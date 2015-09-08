@@ -70,7 +70,7 @@ static CGFloat const kImageHeight = 80.f;
     self.articleImageView.contentMode = UIViewContentModeScaleAspectFit;
     
     self.readStripeView = [[UIView alloc] init];
-    self.readStripeView.backgroundColor = [[UIColor cyanColor] colorWithAlphaComponent:0.2];
+    self.readStripeView.backgroundColor = [[UIColor blueColor] colorWithAlphaComponent:0.7];
     self.readStripeView.hidden = YES;
     
     [self.contentView addSubview:self.titleLabel];
@@ -116,7 +116,7 @@ static CGFloat const kImageHeight = 80.f;
     
     self.readStripeView.top = 0;
     self.readStripeView.height = self.contentView.height;
-    self.readStripeView.width = 100.f;
+    self.readStripeView.width = 10.f;
     self.readStripeView.right = self.contentView.right;
 }
 

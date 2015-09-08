@@ -61,9 +61,9 @@ static CGFloat const kImageHeight = 160.f;
     self.scrollView = [[UIScrollView alloc] init];
     
     self.articleTitleLabel = [[UILabel alloc] init];
-    self.articleTitleLabel.font = [UIFont systemFontOfSize:16];
+    self.articleTitleLabel.font = [UIFont boldSystemFontOfSize:16];
     self.articleTitleLabel.textColor = [UIColor blackColor];
-    self.articleTitleLabel.textAlignment = NSTextAlignmentLeft;
+    self.articleTitleLabel.textAlignment = NSTextAlignmentCenter;
     self.articleTitleLabel.lineBreakMode = NSLineBreakByWordWrapping;
     self.articleTitleLabel.minimumScaleFactor = 0.7;
     self.articleTitleLabel.numberOfLines = 0;
@@ -115,9 +115,14 @@ static CGFloat const kImageHeight = 160.f;
     self.articleDateLabel.width = self.articleTitleLabel.width;
     
     self.articleImageView.top = self.articleDateLabel.bottom + kMargin;
-    self.articleImageView.width = kImageWidth;
-    self.articleImageView.height = kImageHeight;
     self.articleImageView.centerX = self.view.centerX;
+    if (self.articleImageView.image) {
+        self.articleImageView.width = kImageWidth;
+        self.articleImageView.height = kImageHeight;
+    } else {
+        self.articleImageView.width = 0;
+        self.articleImageView.height = 0;
+    }
     
     [self.articleContentTextView sizeToFit];
     self.articleContentTextView.left = kMargin;
@@ -153,6 +158,8 @@ static CGFloat const kImageHeight = 160.f;
     
     if (self.article.image.fetchedValue) {
         self.articleImageView.image = [self.article.image imageFromDisk];
+    } else {
+        self.articleImageView.image = nil;
     }
     
     if ([self.delegate respondsToSelector:@selector(articleDetailViewController:didOpenArticle:)]) {
