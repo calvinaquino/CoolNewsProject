@@ -12,13 +12,19 @@
 #import "CoreDataController.h"
 #import "Article.h"
 #import "Image.h"
+#import "UIView+Rect.h"
 #import "ArticleTableViewCell.h"
+
+static CGFloat const kMargin = 20.f;
 
 @interface ArticleListViewController () <UITableViewDataSource, UITableViewDelegate, ArticleDetailDelegate>
 
 @property (nonatomic, strong) UIRefreshControl *refreshControl;
 @property (nonatomic, strong) UITableView *tableView;
 @property (nonatomic, strong) NSArray *articles;
+@property (nonatomic, strong) UIView *filterContainer;
+@property (nonatomic, strong) UISegmentedControl *filterSegmentedControl;
+@property (nonatomic, strong) NSArray *filters;
 @property (nonatomic, assign) BOOL firstTimeRefresh;
 
 @end
@@ -43,9 +49,21 @@
     self.title = @"Articles";
     self.view.backgroundColor = [UIColor whiteColor];
     self.firstTimeRefresh = YES;
-    
+    [self setupFilterSegmentedControl];
     [self setupTableView];
     [self loadDownloadedArticles];
+}
+
+- (void)setupFilterSegmentedControl {
+    self.filterSegmentedControl = [[UISegmentedControl alloc] initWithItems:self.filters];
+    [self.filterSegmentedControl addTarget:self action:@selector(handleFilterSelected:) forControlEvents: UIControlEventValueChanged];
+    self.filterSegmentedControl.selectedSegmentIndex = 0;
+    
+    self.filterContainer = [[UIView alloc] init];
+    self.filterContainer.backgroundColor = [[UIColor grayColor] colorWithAlphaComponent:0.3];
+    
+    [self.filterContainer addSubview:self.filterSegmentedControl];
+    [self.view addSubview:self.filterContainer];
 }
 
 - (void)setupTableView {
@@ -65,6 +83,7 @@
 
 - (void)loadDownloadedArticles {
     self.articles = [CoreDataController allArticles];
+    [self applyFilter];
     if (self.articles.count) {
         [self.tableView reloadData];
     }
@@ -73,7 +92,23 @@
 - (void)viewDidLayoutSubviews {
     [super viewDidLayoutSubviews];
     
-    self.tableView.frame = self.view.bounds;
+    CGFloat topHeight = self.navigationController.navigationBar.height;
+    topHeight += [UIApplication sharedApplication].isStatusBarHidden ? 0 : [[UIApplication sharedApplication] statusBarFrame].size.height;
+    
+    self.filterContainer.top = topHeight;
+    self.filterContainer.left = 0;
+    self.filterContainer.width = self.view.width;
+    self.filterContainer.height = 50;
+    
+    self.filterSegmentedControl.top = (kMargin / 2);
+    self.filterSegmentedControl.left = kMargin;
+    self.filterSegmentedControl.width = self.view.width - (kMargin * 2);
+    self.filterSegmentedControl.height = self.filterContainer.height - kMargin;
+    
+    self.tableView.top = self.filterContainer.bottom;
+    self.tableView.width = self.view.width;
+    self.tableView.height = self.view.height - self.filterContainer.bottom;
+    self.tableView.left = 0;
 }
 
 - (void)viewDidAppear:(BOOL)animated {
@@ -88,6 +123,14 @@
 
 #pragma mark - Private Methods
 
+- (NSArray *)filters {
+    if (!_filters) {
+        _filters = @[ArticleAttributes.title,ArticleAttributes.date,ArticleAttributes.authors,ArticleAttributes.website];
+    }
+    
+    return _filters;
+}
+
 - (void)fetchArticles {
     __weak typeof(self) weakSelf = self;
     [ArticleDownloader downloadArticlesWithCompletion:^(BOOL success) {
@@ -96,6 +139,7 @@
                 [weakSelf.refreshControl endRefreshing];
             }
             weakSelf.articles = [CoreDataController allArticles];
+            [weakSelf applyFilter];
             [weakSelf.tableView reloadData];
         }];
     }];
@@ -115,6 +159,16 @@
     }
 }
 
+- (void)handleFilterSelected:(UISegmentedControl *)segmentedControl {
+    [self applyFilter];
+    [self.tableView reloadData];
+}
+
+- (void)applyFilter {
+    NSString *orderKey =  self.filters[self.filterSegmentedControl.selectedSegmentIndex];
+    NSSortDescriptor *orderSort = [[NSSortDescriptor alloc] initWithKey:orderKey ascending:YES selector:@selector(compare:)];
+    self.articles = [self.articles sortedArrayUsingDescriptors:@[orderSort]];
+}
 
 #pragma mark - UITableViewDelegate
 
