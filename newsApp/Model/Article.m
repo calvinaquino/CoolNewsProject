@@ -24,11 +24,10 @@
 }
 
 - (void)deleteImage {
-    if (self.image.fetchedValue) {
+    if (self.image.fetchedValue && self.image.filePath) {
         [self.image deleteImageFile];
+        [[CoreDataController context] deleteObject:self.image];
     }
-    
-    [[CoreDataController context] deleteObject:self.image];
 }
 
 @end

@@ -138,7 +138,7 @@ static CGFloat const kImageHeight = 80.f;
 - (void)setArticleRead:(BOOL)articleRead {
     _articleRead = articleRead;
     
-    self.readStripeView.hidden = !articleRead;
+    self.readStripeView.hidden = articleRead;
 }
 
 - (void)updateImage {

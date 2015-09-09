@@ -32,7 +32,7 @@
     UINavigationController *masterViewController = [[UINavigationController alloc] initWithRootViewController:self.articleListViewController];
     
     UIViewController *detailViewController = nil;
-    if ([UIScreen mainScreen].traitCollection.userInterfaceIdiom == UIUserInterfaceIdiomPad) {
+    if (self.window.traitCollection.horizontalSizeClass == UIUserInterfaceSizeClassRegular) {
         detailViewController = [[UINavigationController alloc] initWithRootViewController:self.articleDetailViewController];
     } else {
         detailViewController = self.articleDetailViewController;
@@ -65,12 +65,10 @@
     [CoreDataController saveContext];
 }
 
-
 #pragma mark - UISplitViewControllerDelegate
 
 - (BOOL)splitViewController:(UISplitViewController *)splitViewController showDetailViewController:(UIViewController *)vc sender:(id)sender {
-    UIViewController *senderVc = (UIViewController *)sender;
-    if (senderVc.traitCollection.userInterfaceIdiom == UIUserInterfaceIdiomPad) {
+    if (self.window.traitCollection.horizontalSizeClass == UIUserInterfaceSizeClassRegular) {
         UINavigationController *detailViewController = [[UINavigationController alloc] initWithRootViewController:vc];
         splitViewController.viewControllers = @[splitViewController.viewControllers[0], detailViewController];
         return YES;

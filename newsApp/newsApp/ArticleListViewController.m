@@ -121,7 +121,6 @@ static CGFloat const kMargin = 20.f;
     }
 }
 
-
 #pragma mark - Private Methods
 
 - (NSArray *)filters {
@@ -139,9 +138,17 @@ static CGFloat const kMargin = 20.f;
             if (weakSelf.refreshControl.isRefreshing) {
                 [weakSelf.refreshControl endRefreshing];
             }
-            weakSelf.articles = [CoreDataController allArticles];
-            [weakSelf applyFilter];
-            [weakSelf.tableView reloadData];
+            if (success) {
+                weakSelf.articles = [CoreDataController allArticles];
+                [weakSelf applyFilter];
+                [weakSelf.tableView reloadData];
+            } else {
+                UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"Internet Error" message:@"There was a problem fetching the articles: The server could not be reached. Please make sure you have internet connection and try again." preferredStyle:UIAlertControllerStyleAlert];
+                UIAlertAction *okAction = [UIAlertAction actionWithTitle:@"Ok" style:UIAlertActionStyleDestructive handler:nil];
+                [alertController addAction:okAction];
+                
+                [self.splitViewController presentViewController:alertController animated:YES completion:nil];
+            }
         }];
     }];
 }
@@ -232,6 +239,7 @@ static CGFloat const kMargin = 20.f;
         [deletingArticle deleteImage];
         [[CoreDataController context] deleteObject:deletingArticle];
         self.articles = [CoreDataController allArticles];
+        [self applyFilter];
         [self.tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
     }];
     return @[deleteAction, toggleReadStateAction];
